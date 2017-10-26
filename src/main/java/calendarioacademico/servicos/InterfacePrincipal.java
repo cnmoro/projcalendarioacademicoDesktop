@@ -32,6 +32,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         botaoHorarios = new javax.swing.JButton();
         botaoParticipados = new javax.swing.JButton();
+        botaoPrivilegio = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Eventos Acadêmicos");
@@ -67,6 +68,8 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             }
         });
 
+        botaoPrivilegio.setText("Pedir Privilégio");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -74,12 +77,14 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(botaoHorarios)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(botaoParticipados)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(botaoParticipados)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botaoPrivilegio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,7 +92,8 @@ public class InterfacePrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoHorarios)
-                    .addComponent(botaoParticipados))
+                    .addComponent(botaoParticipados)
+                    .addComponent(botaoPrivilegio))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
                 .addContainerGap())
@@ -145,6 +151,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     private javax.persistence.EntityManager CalendarioPUEntityManager;
     public javax.swing.JButton botaoHorarios;
     public javax.swing.JButton botaoParticipados;
+    public javax.swing.JButton botaoPrivilegio;
     private java.util.List<calendarioacademico.commons.Evento> eventoList;
     private javax.persistence.Query eventoQuery;
     private javax.swing.JScrollPane jScrollPane1;
