@@ -5,6 +5,8 @@
  */
 package calendarioacademico.commons;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -30,8 +33,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Participacao.findAll", query = "SELECT p FROM Participacao p")
     , @NamedQuery(name = "Participacao.findById", query = "SELECT p FROM Participacao p WHERE p.id = :id")
+    , @NamedQuery(name = "Participacao.findByUsuario", query = "SELECT p FROM Participacao p WHERE p.idusuario = :idusuario")
     , @NamedQuery(name = "Participacao.findByFeedback", query = "SELECT p FROM Participacao p WHERE p.feedback = :feedback")})
 public class Participacao implements Serializable {
+
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,7 +68,9 @@ public class Participacao implements Serializable {
     }
 
     public void setId(Integer id) {
+        Integer oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getFeedback() {
@@ -69,7 +78,9 @@ public class Participacao implements Serializable {
     }
 
     public void setFeedback(String feedback) {
+        String oldFeedback = this.feedback;
         this.feedback = feedback;
+        changeSupport.firePropertyChange("feedback", oldFeedback, feedback);
     }
 
     public Usuario getIdusuario() {
@@ -77,7 +88,9 @@ public class Participacao implements Serializable {
     }
 
     public void setIdusuario(Usuario idusuario) {
+        Usuario oldIdusuario = this.idusuario;
         this.idusuario = idusuario;
+        changeSupport.firePropertyChange("idusuario", oldIdusuario, idusuario);
     }
 
     public Evento getIdevento() {
@@ -85,7 +98,9 @@ public class Participacao implements Serializable {
     }
 
     public void setIdevento(Evento idevento) {
+        Evento oldIdevento = this.idevento;
         this.idevento = idevento;
+        changeSupport.firePropertyChange("idevento", oldIdevento, idevento);
     }
 
     @Override
@@ -111,6 +126,14 @@ public class Participacao implements Serializable {
     @Override
     public String toString() {
         return "calendarioacademico.commons.Participacao[ id=" + id + " ]";
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
     
 }

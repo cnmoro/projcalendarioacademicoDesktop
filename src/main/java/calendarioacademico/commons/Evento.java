@@ -1,5 +1,7 @@
 package calendarioacademico.commons;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -19,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -44,6 +47,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Evento.findByDatainicio", query = "SELECT e FROM Evento e WHERE e.datainicio = :datainicio")
     , @NamedQuery(name = "Evento.findByDatafim", query = "SELECT e FROM Evento e WHERE e.datafim = :datafim")})
 public class Evento implements Serializable {
+
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -120,7 +126,9 @@ public class Evento implements Serializable {
     }
 
     public void setId(Integer id) {
+        Integer oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getNome() {
@@ -128,7 +136,9 @@ public class Evento implements Serializable {
     }
 
     public void setNome(String nome) {
+        String oldNome = this.nome;
         this.nome = nome;
+        changeSupport.firePropertyChange("nome", oldNome, nome);
     }
 
     public int getHoras() {
@@ -136,7 +146,9 @@ public class Evento implements Serializable {
     }
 
     public void setHoras(int horas) {
+        int oldHoras = this.horas;
         this.horas = horas;
+        changeSupport.firePropertyChange("horas", oldHoras, horas);
     }
 
     public boolean getSemanaacademica() {
@@ -144,7 +156,9 @@ public class Evento implements Serializable {
     }
 
     public void setSemanaacademica(boolean semanaacademica) {
+        boolean oldSemanaacademica = this.semanaacademica;
         this.semanaacademica = semanaacademica;
+        changeSupport.firePropertyChange("semanaacademica", oldSemanaacademica, semanaacademica);
     }
 
     public String getSemanaacademicastring() {
@@ -160,7 +174,9 @@ public class Evento implements Serializable {
     }
 
     public void setAutor(String autor) {
+        String oldAutor = this.autor;
         this.autor = autor;
+        changeSupport.firePropertyChange("autor", oldAutor, autor);
     }
 
     public Double getLat() {
@@ -168,7 +184,9 @@ public class Evento implements Serializable {
     }
 
     public void setLat(Double lat) {
+        Double oldLat = this.lat;
         this.lat = lat;
+        changeSupport.firePropertyChange("lat", oldLat, lat);
     }
 
     public Double getLon() {
@@ -176,7 +194,9 @@ public class Evento implements Serializable {
     }
 
     public void setLon(Double lon) {
+        Double oldLon = this.lon;
         this.lon = lon;
+        changeSupport.firePropertyChange("lon", oldLon, lon);
     }
 
     public String getEndereco() {
@@ -184,7 +204,9 @@ public class Evento implements Serializable {
     }
 
     public void setEndereco(String endereco) {
+        String oldEndereco = this.endereco;
         this.endereco = endereco;
+        changeSupport.firePropertyChange("endereco", oldEndereco, endereco);
     }
 
     public Date getDatainicio() {
@@ -192,7 +214,9 @@ public class Evento implements Serializable {
     }
 
     public void setDatainicio(Date datainicio) {
+        Date oldDatainicio = this.datainicio;
         this.datainicio = datainicio;
+        changeSupport.firePropertyChange("datainicio", oldDatainicio, datainicio);
     }
 
     public Date getDatafim() {
@@ -200,7 +224,9 @@ public class Evento implements Serializable {
     }
 
     public void setDatafim(Date datafim) {
+        Date oldDatafim = this.datafim;
         this.datafim = datafim;
+        changeSupport.firePropertyChange("datafim", oldDatafim, datafim);
     }
 
     public byte[] getDocumento() {
@@ -208,7 +234,9 @@ public class Evento implements Serializable {
     }
 
     public void setDocumento(byte[] documento) {
+        byte[] oldDocumento = this.documento;
         this.documento = documento;
+        changeSupport.firePropertyChange("documento", oldDocumento, documento);
     }
 
     @XmlTransient
@@ -225,7 +253,9 @@ public class Evento implements Serializable {
     }
 
     public void setEventopai(Evento eventopai) {
+        Evento oldEventopai = this.eventopai;
         this.eventopai = eventopai;
+        changeSupport.firePropertyChange("eventopai", oldEventopai, eventopai);
     }
 
     @XmlTransient
@@ -260,6 +290,14 @@ public class Evento implements Serializable {
     @Override
     public String toString() {
         return this.nome;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
 
 }

@@ -5,6 +5,8 @@
  */
 package calendarioacademico.commons;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -23,6 +25,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -40,6 +43,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Profatendimento.findByDatainicio", query = "SELECT p FROM Profatendimento p WHERE p.datainicio = :datainicio")
     , @NamedQuery(name = "Profatendimento.findByDatafim", query = "SELECT p FROM Profatendimento p WHERE p.datafim = :datafim")})
 public class Profatendimento implements Serializable {
+
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -81,7 +87,9 @@ public class Profatendimento implements Serializable {
     }
 
     public void setId(Integer id) {
+        Integer oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public Date getDatainicio() {
@@ -89,7 +97,9 @@ public class Profatendimento implements Serializable {
     }
 
     public void setDatainicio(Date datainicio) {
+        Date oldDatainicio = this.datainicio;
         this.datainicio = datainicio;
+        changeSupport.firePropertyChange("datainicio", oldDatainicio, datainicio);
     }
 
     public Date getDatafim() {
@@ -97,7 +107,9 @@ public class Profatendimento implements Serializable {
     }
 
     public void setDatafim(Date datafim) {
+        Date oldDatafim = this.datafim;
         this.datafim = datafim;
+        changeSupport.firePropertyChange("datafim", oldDatafim, datafim);
     }
 
     public Usuario getIdprofessor() {
@@ -105,7 +117,9 @@ public class Profatendimento implements Serializable {
     }
 
     public void setIdprofessor(Usuario idprofessor) {
+        Usuario oldIdprofessor = this.idprofessor;
         this.idprofessor = idprofessor;
+        changeSupport.firePropertyChange("idprofessor", oldIdprofessor, idprofessor);
     }
 
     @XmlTransient
@@ -140,6 +154,14 @@ public class Profatendimento implements Serializable {
     @Override
     public String toString() {
         return "calendarioacademico.commons.Profatendimento[ id=" + id + " ]";
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
     
 }

@@ -13,7 +13,7 @@ public class Controle {
                     } catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException ex) {
                         ex.printStackTrace();
                     }
-                    new InterfacePrincipal().setVisible(true);
+                    new InterfaceLogin().setVisible(true);
                 });  
 
 	}
