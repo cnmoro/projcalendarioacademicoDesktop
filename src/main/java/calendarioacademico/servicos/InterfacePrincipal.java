@@ -1,5 +1,11 @@
 package calendarioacademico.servicos;
 
+import calendarioacademico.utils.SendMail;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.apache.commons.mail.EmailException;
+
 /**
  *
  * @author moro
@@ -13,6 +19,11 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
+        if (UsuarioManager.getUsuario().getNivelacesso().equalsIgnoreCase("Usuário")) {
+            this.botaoPrivilegio.setEnabled(true);
+        } else {
+            this.botaoPrivilegio.setEnabled(false);
+        }
     }
 
     /**
@@ -69,6 +80,11 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         });
 
         botaoPrivilegio.setText("Pedir Privilégio");
+        botaoPrivilegio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoPrivilegioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -111,6 +127,18 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     private void botaoParticipadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoParticipadosActionPerformed
         new InterfaceParticipados().setVisible(true);
     }//GEN-LAST:event_botaoParticipadosActionPerformed
+
+    private void botaoPrivilegioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPrivilegioActionPerformed
+        Object[] selectionValues = { "Professor", "Colaborador Semana Acadêmica" };
+        String initialSelection = "Professor";
+        Object selection = JOptionPane.showInputDialog(null, "Qual nível de acesso deseja requisitar?",
+            "Seleção", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+        try {
+            SendMail.enviaEmail(selection.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_botaoPrivilegioActionPerformed
 
     /**
      * @param args the command line arguments

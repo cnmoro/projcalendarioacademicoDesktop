@@ -16,6 +16,5 @@ public class UsuarioManager {
     public static void setUsuario(Usuario usuario) {
         UsuarioManager.usuario = usuario;
     }
-
-    
+   
 }
