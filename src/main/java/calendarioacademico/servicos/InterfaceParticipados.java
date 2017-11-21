@@ -1,10 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package calendarioacademico.servicos;
+import calendarioacademico.commons.Participacao;
 import calendarioacademico.utils.EManager;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,14 +30,15 @@ public class InterfaceParticipados extends javax.swing.JFrame {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         CalendarioPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("CalendarioPU").createEntityManager();
-        participacaoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : EManager.getInstance().createNamedQuery("Participacao.findByUsuario").setParameter("idusuario", UsuarioManager.getUsuario()).getResultList();
+        participacaoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Participacao p");
+        participacaoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : participacaoQuery.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaParticipacao = new javax.swing.JTable();
         botaoFeedback = new javax.swing.JButton();
 
         setTitle("Eventos Participados");
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, participacaoList, jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, participacaoList, tabelaParticipacao);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${idevento.nome}"));
         columnBinding.setColumnName("Evento");
         columnBinding.setColumnClass(String.class);
@@ -48,7 +47,7 @@ public class InterfaceParticipados extends javax.swing.JFrame {
         columnBinding.setColumnClass(String.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabelaParticipacao);
 
         botaoFeedback.setText("Dar Feedback");
         botaoFeedback.addActionListener(new java.awt.event.ActionListener() {
@@ -84,7 +83,9 @@ public class InterfaceParticipados extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoFeedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoFeedbackActionPerformed
-        // TODO add your handling code here:
+        if (participacaoList.get(tabelaParticipacao.getSelectedRow()) != null) {
+            new InterfaceFeedback().setVisible(true);
+        }
     }//GEN-LAST:event_botaoFeedbackActionPerformed
 
     /**
@@ -121,14 +122,18 @@ public class InterfaceParticipados extends javax.swing.JFrame {
             }
         });
     }
+    
+    public static Participacao getParticipacaoSelecionada() {
+        return participacaoList.get(tabelaParticipacao.getSelectedRow());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager CalendarioPUEntityManager;
     public javax.swing.JButton botaoFeedback;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private java.util.List<calendarioacademico.commons.Participacao> participacaoList;
+    private static java.util.List<calendarioacademico.commons.Participacao> participacaoList;
     private javax.persistence.Query participacaoQuery;
+    public static javax.swing.JTable tabelaParticipacao;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
