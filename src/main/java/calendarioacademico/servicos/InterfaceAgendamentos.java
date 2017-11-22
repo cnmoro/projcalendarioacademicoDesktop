@@ -5,7 +5,6 @@
  */
 package calendarioacademico.servicos;
 
-import calendarioacademico.commons.Profatendimento;
 import calendarioacademico.commons.Reuniaoprofessor;
 import calendarioacademico.utils.EManager;
 import javax.swing.JOptionPane;
@@ -76,14 +75,14 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(2, 2, 2)
-                .addComponent(bt_cancelaragendamento)
-                .addGap(232, 232, 232))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bt_cancelaragendamento)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,9 +152,9 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
     private javax.persistence.EntityManager CalendarioPUEntityManager;
     private javax.swing.JButton bt_cancelaragendamento;
     private javax.swing.JScrollPane jScrollPane1;
-    private java.util.List<calendarioacademico.commons.Reuniaoprofessor> reuniaoprofessorList;
+    public static java.util.List<calendarioacademico.commons.Reuniaoprofessor> reuniaoprofessorList;
     private javax.persistence.Query reuniaoprofessorQuery;
-    private javax.swing.JTable tabela_agendamentos;
+    private static javax.swing.JTable tabela_agendamentos;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

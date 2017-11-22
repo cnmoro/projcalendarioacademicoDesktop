@@ -42,6 +42,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         botaoParticipados = new javax.swing.JButton();
         botaoPrivilegio = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Eventos Acadêmicos");
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, eventoList, tabela_eventos);

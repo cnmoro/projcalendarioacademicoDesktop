@@ -6,15 +6,20 @@
 
 package calendarioacademico.servicos;
 
+import calendarioacademico.commons.Profatendimento;
 import calendarioacademico.commons.Reuniaoprofessor;
 import calendarioacademico.utils.EManager;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  *
  * @author moro
  */
 public class InterfaceHorarios extends javax.swing.JFrame {
+    
+    public static boolean inserir = true;
 
     /** Creates new form InterfaceHorarios */
     public InterfaceHorarios() {
@@ -24,9 +29,13 @@ public class InterfaceHorarios extends javax.swing.JFrame {
         if (UsuarioManager.getUsuario().getNivelacesso().equalsIgnoreCase("Professor")) {
             this.bt_adicionarHorario.setEnabled(true);
             this.bt_agendarreuniao.setEnabled(false);
+            this.bt_modificaatendimento.setEnabled(true);
+            this.bt_veragendamentos.setText("Reuniões Agendadas");
         } else {
             this.bt_adicionarHorario.setEnabled(false);
             this.bt_agendarreuniao.setEnabled(true);
+            this.bt_modificaatendimento.setEnabled(false);
+            this.bt_veragendamentos.setText("Meus Agendamentos");
         }
     }
 
@@ -43,6 +52,7 @@ public class InterfaceHorarios extends javax.swing.JFrame {
         bt_adicionarHorario = new javax.swing.JButton();
         bt_agendarreuniao = new javax.swing.JButton();
         bt_veragendamentos = new javax.swing.JButton();
+        bt_modificaatendimento = new javax.swing.JButton();
 
         setTitle("Horários de Atendimento dos Professores");
 
@@ -50,17 +60,20 @@ public class InterfaceHorarios extends javax.swing.JFrame {
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${idprofessor.login}"));
         columnBinding.setColumnName("Professor");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${datainicio}"));
         columnBinding.setColumnName("Data Início");
         columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${datafim}"));
         columnBinding.setColumnName("Data Fim");
         columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane1.setViewportView(tabela_horarios);
 
-        bt_adicionarHorario.setText("Adicionar Horário");
+        bt_adicionarHorario.setText("Adicionar Atendimento");
         bt_adicionarHorario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_adicionarHorarioActionPerformed(evt);
@@ -81,6 +94,13 @@ public class InterfaceHorarios extends javax.swing.JFrame {
             }
         });
 
+        bt_modificaatendimento.setText("Modificar Atendimento");
+        bt_modificaatendimento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_modificaatendimentoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,16 +108,16 @@ public class InterfaceHorarios extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(bt_adicionarHorario)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(bt_modificaatendimento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bt_adicionarHorario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bt_veragendamentos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bt_agendarreuniao, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bt_agendarreuniao, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,8 +127,10 @@ public class InterfaceHorarios extends javax.swing.JFrame {
                     .addComponent(bt_adicionarHorario)
                     .addComponent(bt_agendarreuniao)
                     .addComponent(bt_veragendamentos))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bt_modificaatendimento)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -118,7 +140,8 @@ public class InterfaceHorarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_adicionarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_adicionarHorarioActionPerformed
-        // TODO add your handling code here:
+        inserir = true;
+        new InterfaceGerenciaAtendimentoProf().setVisible(true);
     }//GEN-LAST:event_bt_adicionarHorarioActionPerformed
 
     private void bt_agendarreuniaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_agendarreuniaoActionPerformed
@@ -140,6 +163,11 @@ public class InterfaceHorarios extends javax.swing.JFrame {
     private void bt_veragendamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_veragendamentosActionPerformed
         new InterfaceAgendamentos().setVisible(true);
     }//GEN-LAST:event_bt_veragendamentosActionPerformed
+
+    private void bt_modificaatendimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_modificaatendimentoActionPerformed
+        inserir = false;
+        new InterfaceGerenciaAtendimentoProf().setVisible(true);
+    }//GEN-LAST:event_bt_modificaatendimentoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,6 +208,7 @@ public class InterfaceHorarios extends javax.swing.JFrame {
     private javax.persistence.EntityManager CalendarioPUEntityManager;
     public javax.swing.JButton bt_adicionarHorario;
     public javax.swing.JButton bt_agendarreuniao;
+    private javax.swing.JButton bt_modificaatendimento;
     private javax.swing.JButton bt_veragendamentos;
     private javax.swing.JScrollPane jScrollPane1;
     private static java.util.List<calendarioacademico.commons.Profatendimento> profatendimentoList;
@@ -188,4 +217,15 @@ public class InterfaceHorarios extends javax.swing.JFrame {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
+    public static boolean isInserir() {
+        return inserir;
+    }
+
+    public static List<Profatendimento> getProfatendimentoList() {
+        return profatendimentoList;
+    }
+
+    public static JTable getTabela_horarios() {
+        return tabela_horarios;
+    }
 }
