@@ -3,6 +3,7 @@ package calendarioacademico.servicos;
 import calendarioacademico.utils.SendMail;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.apache.commons.mail.EmailException;
 
@@ -40,7 +41,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         eventoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT e FROM Evento e");
         eventoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : eventoQuery.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabela_eventos = new javax.swing.JTable();
         botaoHorarios = new javax.swing.JButton();
         botaoParticipados = new javax.swing.JButton();
         botaoPrivilegio = new javax.swing.JButton();
@@ -48,7 +49,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Eventos Acadêmicos");
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, eventoList, jTable1);
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, eventoList, tabela_eventos);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nome}"));
         columnBinding.setColumnName("Nome");
         columnBinding.setColumnClass(String.class);
@@ -63,7 +64,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabela_eventos);
 
         botaoHorarios.setText("Horários Professores");
         botaoHorarios.addActionListener(new java.awt.event.ActionListener() {
@@ -135,6 +136,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             "Seleção", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
         try {
             SendMail.enviaEmail(selection.toString());
+            JOptionPane.showMessageDialog(null, "Pedido enviado com sucesso.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -183,7 +185,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     private java.util.List<calendarioacademico.commons.Evento> eventoList;
     private javax.persistence.Query eventoQuery;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabela_eventos;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

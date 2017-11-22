@@ -18,8 +18,6 @@ public class SendMail {
     }
     
     public static void enviaEmail(String nivelAcesso) {
-//        Thread thread = new Thread() {
-//            public void run() {
                 try {
                     Email email = new SimpleEmail();
                     email.setHostName("smtp.gmail.com");
@@ -38,8 +36,5 @@ public class SendMail {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//            }
-//        };
-//    thread.start();  
     }
 }

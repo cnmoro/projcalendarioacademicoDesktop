@@ -42,6 +42,7 @@ public class InterfaceHorarios extends javax.swing.JFrame {
         tabela_horarios = new javax.swing.JTable();
         bt_adicionarHorario = new javax.swing.JButton();
         bt_agendarreuniao = new javax.swing.JButton();
+        bt_veragendamentos = new javax.swing.JButton();
 
         setTitle("Horários de Atendimento dos Professores");
 
@@ -73,6 +74,13 @@ public class InterfaceHorarios extends javax.swing.JFrame {
             }
         });
 
+        bt_veragendamentos.setText("Ver Agendamentos");
+        bt_veragendamentos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_veragendamentosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -83,6 +91,8 @@ public class InterfaceHorarios extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(bt_adicionarHorario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bt_veragendamentos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(bt_agendarreuniao)))
                 .addGap(8, 8, 8))
@@ -93,7 +103,8 @@ public class InterfaceHorarios extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bt_adicionarHorario)
-                    .addComponent(bt_agendarreuniao))
+                    .addComponent(bt_agendarreuniao)
+                    .addComponent(bt_veragendamentos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
                 .addContainerGap())
@@ -123,6 +134,10 @@ public class InterfaceHorarios extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_bt_agendarreuniaoActionPerformed
+
+    private void bt_veragendamentosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_veragendamentosActionPerformed
+        new InterfaceAgendamentos().setVisible(true);
+    }//GEN-LAST:event_bt_veragendamentosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,6 +178,7 @@ public class InterfaceHorarios extends javax.swing.JFrame {
     private javax.persistence.EntityManager CalendarioPUEntityManager;
     public javax.swing.JButton bt_adicionarHorario;
     public javax.swing.JButton bt_agendarreuniao;
+    private javax.swing.JButton bt_veragendamentos;
     private javax.swing.JScrollPane jScrollPane1;
     private static java.util.List<calendarioacademico.commons.Profatendimento> profatendimentoList;
     private javax.persistence.Query profatendimentoQuery;

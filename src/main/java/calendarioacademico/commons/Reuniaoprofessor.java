@@ -5,6 +5,8 @@
  */
 package calendarioacademico.commons;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -32,6 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Reuniaoprofessor.findById", query = "SELECT r FROM Reuniaoprofessor r WHERE r.id = :id")
     , @NamedQuery(name = "Reuniaoprofessor.findByFeedback", query = "SELECT r FROM Reuniaoprofessor r WHERE r.feedback = :feedback")})
 public class Reuniaoprofessor implements Serializable {
+
+    @Transient
+    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,7 +67,9 @@ public class Reuniaoprofessor implements Serializable {
     }
 
     public void setId(Integer id) {
+        Integer oldId = this.id;
         this.id = id;
+        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getFeedback() {
@@ -69,7 +77,9 @@ public class Reuniaoprofessor implements Serializable {
     }
 
     public void setFeedback(String feedback) {
+        String oldFeedback = this.feedback;
         this.feedback = feedback;
+        changeSupport.firePropertyChange("feedback", oldFeedback, feedback);
     }
 
     public Usuario getIdusuario() {
@@ -77,7 +87,9 @@ public class Reuniaoprofessor implements Serializable {
     }
 
     public void setIdusuario(Usuario idusuario) {
+        Usuario oldIdusuario = this.idusuario;
         this.idusuario = idusuario;
+        changeSupport.firePropertyChange("idusuario", oldIdusuario, idusuario);
     }
 
     public Profatendimento getIdprofatendimento() {
@@ -85,7 +97,9 @@ public class Reuniaoprofessor implements Serializable {
     }
 
     public void setIdprofatendimento(Profatendimento idprofatendimento) {
+        Profatendimento oldIdprofatendimento = this.idprofatendimento;
         this.idprofatendimento = idprofatendimento;
+        changeSupport.firePropertyChange("idprofatendimento", oldIdprofatendimento, idprofatendimento);
     }
 
     @Override
@@ -111,6 +125,14 @@ public class Reuniaoprofessor implements Serializable {
     @Override
     public String toString() {
         return "calendarioacademico.commons.Reuniaoprofessor[ id=" + id + " ]";
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
     
 }
