@@ -17,12 +17,11 @@ public class InterfaceParticipados extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         CalendarioPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("CalendarioPU").createEntityManager();
-        participacaoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Participacao p");
+        participacaoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Participacao p WHERE p.idusuario = :idusuario").setParameter("idusuario", UsuarioManager.getUsuario());
         participacaoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : participacaoQuery.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaParticipacao = new javax.swing.JTable();
@@ -34,9 +33,11 @@ public class InterfaceParticipados extends javax.swing.JFrame {
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${idevento.nome}"));
         columnBinding.setColumnName("Evento");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${feedback}"));
         columnBinding.setColumnName("Feedback");
         columnBinding.setColumnClass(String.class);
+        columnBinding.setEditable(false);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane1.setViewportView(tabelaParticipacao);
@@ -72,7 +73,7 @@ public class InterfaceParticipados extends javax.swing.JFrame {
         bindingGroup.bind();
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private void botaoFeedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoFeedbackActionPerformed
         if (participacaoList.get(tabelaParticipacao.getSelectedRow()) != null) {
