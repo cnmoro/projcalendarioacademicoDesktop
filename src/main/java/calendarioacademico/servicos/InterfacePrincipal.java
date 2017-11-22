@@ -1,11 +1,7 @@
 package calendarioacademico.servicos;
 
 import calendarioacademico.utils.SendMail;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import org.apache.commons.mail.EmailException;
 
 /**
  *
@@ -46,7 +42,6 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         botaoParticipados = new javax.swing.JButton();
         botaoPrivilegio = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Eventos Acadêmicos");
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, eventoList, tabela_eventos);
@@ -62,6 +57,12 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         columnBinding.setColumnName("Horas");
         columnBinding.setColumnClass(Integer.class);
         columnBinding.setEditable(false);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${datainicio}"));
+        columnBinding.setColumnName("Data Início");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${datafim}"));
+        columnBinding.setColumnName("Data Fim");
+        columnBinding.setColumnClass(java.util.Date.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();
         jScrollPane1.setViewportView(tabela_eventos);

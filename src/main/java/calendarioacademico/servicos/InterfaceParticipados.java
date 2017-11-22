@@ -12,6 +12,7 @@ public class InterfaceParticipados extends javax.swing.JFrame {
      */
     public InterfaceParticipados() {
         initComponents();
+        this.setDefaultCloseOperation(HIDE_ON_CLOSE); 
         this.setResizable(false);
         this.setLocationRelativeTo(null);
     }

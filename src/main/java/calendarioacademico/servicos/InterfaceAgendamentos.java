@@ -5,6 +5,11 @@
  */
 package calendarioacademico.servicos;
 
+import calendarioacademico.commons.Profatendimento;
+import calendarioacademico.commons.Reuniaoprofessor;
+import calendarioacademico.utils.EManager;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author moro
@@ -16,6 +21,8 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
      */
     public InterfaceAgendamentos() {
         initComponents();
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -33,8 +40,8 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
         reuniaoprofessorList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : reuniaoprofessorQuery.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabela_agendamentos = new javax.swing.JTable();
+        bt_cancelaragendamento = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Agendamentos");
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, reuniaoprofessorList, tabela_agendamentos);
@@ -58,20 +65,33 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
         jTableBinding.bind();
         jScrollPane1.setViewportView(tabela_agendamentos);
 
+        bt_cancelaragendamento.setText("Cancelar agendamento");
+        bt_cancelaragendamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_cancelaragendamentoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGap(2, 2, 2)
+                .addComponent(bt_cancelaragendamento)
+                .addGap(232, 232, 232))
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(bt_cancelaragendamento)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -79,6 +99,20 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bt_cancelaragendamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cancelaragendamentoActionPerformed
+        if (reuniaoprofessorList.get(tabela_agendamentos.getSelectedRow()) != null) {
+            int resposta = JOptionPane.showConfirmDialog(null, "Deseja Cancelar?", "Confirmação",
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (resposta == JOptionPane.YES_OPTION) {
+                Reuniaoprofessor rp = reuniaoprofessorList.get(tabela_agendamentos.getSelectedRow());
+                EManager.getInstance().getTransaction().begin();
+                EManager.getInstance().remove(EManager.getInstance().createNamedQuery("Reuniaoprofessor.findById", Reuniaoprofessor.class).setParameter("id", rp.getId()).getSingleResult());
+                EManager.getInstance().getTransaction().commit();
+                JOptionPane.showMessageDialog(null, "Agendamento cancelado.");
+            }
+        }
+    }//GEN-LAST:event_bt_cancelaragendamentoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,6 +151,7 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager CalendarioPUEntityManager;
+    private javax.swing.JButton bt_cancelaragendamento;
     private javax.swing.JScrollPane jScrollPane1;
     private java.util.List<calendarioacademico.commons.Reuniaoprofessor> reuniaoprofessorList;
     private javax.persistence.Query reuniaoprofessorQuery;

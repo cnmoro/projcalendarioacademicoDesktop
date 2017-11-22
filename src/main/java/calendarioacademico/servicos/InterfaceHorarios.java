@@ -74,7 +74,7 @@ public class InterfaceHorarios extends javax.swing.JFrame {
             }
         });
 
-        bt_veragendamentos.setText("Ver Agendamentos");
+        bt_veragendamentos.setText("Meus Agendamentos");
         bt_veragendamentos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_veragendamentosActionPerformed(evt);
@@ -87,15 +87,17 @@ public class InterfaceHorarios extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(bt_adicionarHorario)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bt_veragendamentos, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bt_agendarreuniao)))
-                .addGap(8, 8, 8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bt_agendarreuniao, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,7 +130,7 @@ public class InterfaceHorarios extends javax.swing.JFrame {
                 rp.setIdprofatendimento(profatendimentoList.get(tabela_horarios.getSelectedRow()));
                 rp.setIdusuario(UsuarioManager.getUsuario());
                 EManager.getInstance().getTransaction().begin();
-                EManager.getInstance().merge(rp);
+                EManager.getInstance().persist(rp);
                 EManager.getInstance().getTransaction().commit();
                 JOptionPane.showMessageDialog(null, "Reunião Agendada com Sucesso.");
             }
