@@ -1,5 +1,10 @@
 package calendarioacademico.servicos;
+import calendarioacademico.commons.Evento;
 import calendarioacademico.commons.Participacao;
+import calendarioacademico.utils.EManager;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,15 +23,17 @@ public class InterfaceParticipados extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         CalendarioPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("CalendarioPU").createEntityManager();
-        participacaoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Participacao p WHERE p.idusuario = :idusuario").setParameter("idusuario", UsuarioManager.getUsuario());
+        participacaoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Participacao p");
         participacaoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : participacaoQuery.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaParticipacao = new javax.swing.JTable();
         botaoFeedback = new javax.swing.JButton();
+        bt_verhoras = new javax.swing.JButton();
 
         setTitle("Eventos Participados");
 
@@ -50,6 +57,13 @@ public class InterfaceParticipados extends javax.swing.JFrame {
             }
         });
 
+        bt_verhoras.setText("Ver Total de Horas Obtidas");
+        bt_verhoras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_verhorasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -57,7 +71,10 @@ public class InterfaceParticipados extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(botaoFeedback)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(botaoFeedback)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bt_verhoras))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -65,7 +82,9 @@ public class InterfaceParticipados extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(botaoFeedback)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botaoFeedback)
+                    .addComponent(bt_verhoras))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
                 .addContainerGap())
@@ -74,13 +93,32 @@ public class InterfaceParticipados extends javax.swing.JFrame {
         bindingGroup.bind();
 
         pack();
-    }
+    }// </editor-fold>//GEN-END:initComponents
 
     private void botaoFeedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoFeedbackActionPerformed
         if (participacaoList.get(tabelaParticipacao.getSelectedRow()) != null) {
             new InterfaceFeedback().setVisible(true);
         }
     }//GEN-LAST:event_botaoFeedbackActionPerformed
+
+    private void bt_verhorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_verhorasActionPerformed
+        List<Evento> eventos = EManager.getInstance().createNamedQuery("Evento.findAll").getResultList();
+        List<Participacao> participacoes = EManager.getInstance().createNamedQuery("Participacao.findAll").getResultList();
+        List<Integer> eventoIds = new ArrayList();
+        int somaHoras = 0;
+        for (int i=0; i<participacoes.size(); i++) {
+            if (participacoes.get(i).getIdusuario() == UsuarioManager.getUsuario()) {
+                eventoIds.add(participacoes.get(i).getIdevento().getId());
+            }
+        }
+        for (int i=0; i<eventos.size(); i++) {
+            if (eventoIds.contains((Integer) eventos.get(i).getId())) {
+                somaHoras = somaHoras + eventos.get(i).getHoras();
+            }
+        }
+//        System.out.println(somaHoras);
+        JOptionPane.showMessageDialog(null, somaHoras + " horas obtidas por meio da participação em eventos acadêmicos.");
+    }//GEN-LAST:event_bt_verhorasActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -121,6 +159,7 @@ public class InterfaceParticipados extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.persistence.EntityManager CalendarioPUEntityManager;
     public javax.swing.JButton botaoFeedback;
+    private javax.swing.JButton bt_verhoras;
     private javax.swing.JScrollPane jScrollPane1;
     private static java.util.List<calendarioacademico.commons.Participacao> participacaoList;
     private javax.persistence.Query participacaoQuery;
