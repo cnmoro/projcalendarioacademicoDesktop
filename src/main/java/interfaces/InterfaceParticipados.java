@@ -1,10 +1,10 @@
-package calendarioacademico.servicos;
-import calendarioacademico.commons.Evento;
-import calendarioacademico.commons.Participacao;
-import calendarioacademico.utils.EManager;
+package interfaces;
+import utils.EManager;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import models.Evento;
+import models.Participacao;
 
 /**
  *
@@ -27,9 +27,7 @@ public class InterfaceParticipados extends javax.swing.JFrame {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        CalendarioPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("CalendarioPU").createEntityManager();
-        participacaoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Participacao p WHERE p.idusuario = :idusuario").setParameter("idusuario", UsuarioManager.getUsuario());
-        participacaoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : participacaoQuery.getResultList();
+        participacaoList = EManager.getInstance().getDatabaseAccessor().getParticipacoesByUsuario(UsuarioManager.getUsuario());
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaParticipacao = new javax.swing.JTable();
         botaoFeedback = new javax.swing.JButton();
@@ -102,8 +100,8 @@ public class InterfaceParticipados extends javax.swing.JFrame {
     }//GEN-LAST:event_botaoFeedbackActionPerformed
 
     private void bt_verhorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_verhorasActionPerformed
-        List<Evento> eventos = EManager.getInstance().createNamedQuery("Evento.findAll").getResultList();
-        List<Participacao> participacoes = EManager.getInstance().createNamedQuery("Participacao.findAll").getResultList();
+        List<Evento> eventos = EManager.getInstance().getDatabaseAccessor().getEventos();
+        List<Participacao> participacoes = EManager.getInstance().getDatabaseAccessor().getParticipacoes();
         List<Integer> eventoIds = new ArrayList();
         int somaHoras = 0;
         for (int i=0; i<participacoes.size(); i++) {
@@ -156,14 +154,11 @@ public class InterfaceParticipados extends javax.swing.JFrame {
         return participacaoList.get(tabelaParticipacao.getSelectedRow());
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.persistence.EntityManager CalendarioPUEntityManager;
     public javax.swing.JButton botaoFeedback;
     private javax.swing.JButton bt_verhoras;
     private javax.swing.JScrollPane jScrollPane1;
-    private static java.util.List<calendarioacademico.commons.Participacao> participacaoList;
-    private javax.persistence.Query participacaoQuery;
+    private static List<Participacao> participacaoList;
     public static javax.swing.JTable tabelaParticipacao;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
+
 }

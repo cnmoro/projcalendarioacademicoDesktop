@@ -4,14 +4,14 @@
  * and open the template in the editor.
  */
 
-package calendarioacademico.servicos;
+package interfaces;
 
-import calendarioacademico.commons.Profatendimento;
-import calendarioacademico.commons.Reuniaoprofessor;
-import calendarioacademico.utils.EManager;
+import utils.EManager;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import models.Profatendimento;
+import models.Reuniaoprofessor;
 
 /**
  *
@@ -44,13 +44,11 @@ public class InterfaceHorarios extends javax.swing.JFrame {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        CalendarioPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("CalendarioPU").createEntityManager();
         if (UsuarioManager.getUsuario().getNivelacesso().equalsIgnoreCase("Professor")) {
-            profatendimentoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Profatendimento p WHERE p.idprofessor = :idprofessor").setParameter("idprofessor", UsuarioManager.getUsuario());
+            profatendimentoList = EManager.getInstance().getDatabaseAccessor().getProfatendimentosByProfessor(UsuarioManager.getUsuario());
         } else {
-            profatendimentoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Profatendimento p");
+            profatendimentoList = EManager.getInstance().getDatabaseAccessor().getProfatendimentos();
         }
-        profatendimentoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : profatendimentoQuery.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabela_horarios = new javax.swing.JTable();
         bt_adicionarHorario = new javax.swing.JButton();
@@ -156,9 +154,7 @@ public class InterfaceHorarios extends javax.swing.JFrame {
                 Reuniaoprofessor rp = new Reuniaoprofessor();
                 rp.setIdprofatendimento(profatendimentoList.get(tabela_horarios.getSelectedRow()));
                 rp.setIdusuario(UsuarioManager.getUsuario());
-                EManager.getInstance().getTransaction().begin();
-                EManager.getInstance().persist(rp);
-                EManager.getInstance().getTransaction().commit();
+                EManager.getInstance().getDatabaseAccessor().cadastraReuniao(rp);
                 JOptionPane.showMessageDialog(null, "Reunião Agendada com Sucesso.");
             }
         }
@@ -208,18 +204,14 @@ public class InterfaceHorarios extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.persistence.EntityManager CalendarioPUEntityManager;
     public javax.swing.JButton bt_adicionarHorario;
     public javax.swing.JButton bt_agendarreuniao;
     private javax.swing.JButton bt_modificaatendimento;
     private javax.swing.JButton bt_veragendamentos;
     private javax.swing.JScrollPane jScrollPane1;
-    private static java.util.List<calendarioacademico.commons.Profatendimento> profatendimentoList;
-    private javax.persistence.Query profatendimentoQuery;
+    private static List<Profatendimento> profatendimentoList;
     private static javax.swing.JTable tabela_horarios;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
 
     public static boolean isInserir() {
         return inserir;

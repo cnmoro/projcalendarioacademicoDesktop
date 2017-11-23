@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package calendarioacademico.servicos;
+package interfaces;
 
-import calendarioacademico.commons.Reuniaoprofessor;
-import calendarioacademico.utils.EManager;
+import utils.EManager;
+import java.util.List;
 import javax.swing.JOptionPane;
+import models.Reuniaoprofessor;
 
 /**
  *
@@ -29,12 +30,10 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        CalendarioPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("CalendarioPU").createEntityManager();
-        
         if (UsuarioManager.getUsuario().getNivelacesso().equalsIgnoreCase("Professor")) {
-            reuniaoprofessorList = EManager.getInstance().createNamedQuery("Reuniaoprofessor.findByProf").setParameter("idprofessor", UsuarioManager.getUsuario()).getResultList();
+            reuniaoprofessorList = EManager.getInstance().getDatabaseAccessor().getReuniaoByProf(UsuarioManager.getUsuario());
         } else {
-            reuniaoprofessorList = EManager.getInstance().createNamedQuery("Reuniaoprofessor.findByUser").setParameter("idusuario", UsuarioManager.getUsuario()).getResultList();
+            reuniaoprofessorList = EManager.getInstance().getDatabaseAccessor().getReuniaoByUsuario(UsuarioManager.getUsuario());
         }
         
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -105,9 +104,7 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (resposta == JOptionPane.YES_OPTION) {
                 Reuniaoprofessor rp = reuniaoprofessorList.get(tabela_agendamentos.getSelectedRow());
-                EManager.getInstance().getTransaction().begin();
-                EManager.getInstance().remove(EManager.getInstance().createNamedQuery("Reuniaoprofessor.findById", Reuniaoprofessor.class).setParameter("id", rp.getId()).getSingleResult());
-                EManager.getInstance().getTransaction().commit();
+                EManager.getInstance().getDatabaseAccessor().removeReuniao(rp);
                 JOptionPane.showMessageDialog(null, "Agendamento cancelado.");
             }
         }
@@ -148,13 +145,10 @@ public class InterfaceAgendamentos extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.persistence.EntityManager CalendarioPUEntityManager;
     private javax.swing.JButton bt_cancelaragendamento;
     private javax.swing.JScrollPane jScrollPane1;
-    public static java.util.List<calendarioacademico.commons.Reuniaoprofessor> reuniaoprofessorList;
-    private javax.persistence.Query reuniaoprofessorQuery;
+    public static List<Reuniaoprofessor> reuniaoprofessorList;
     private static javax.swing.JTable tabela_agendamentos;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
+
 }

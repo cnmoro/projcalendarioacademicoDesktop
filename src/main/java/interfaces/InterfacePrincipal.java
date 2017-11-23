@@ -1,7 +1,10 @@
-package calendarioacademico.servicos;
+package interfaces;
 
-import calendarioacademico.utils.SendMail;
+import java.util.List;
 import javax.swing.JOptionPane;
+import models.Evento;
+import models.Usuario;
+import utils.EManager;
 
 /**
  *
@@ -22,13 +25,10 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        CalendarioPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("CalendarioPU").createEntityManager();
-        eventoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT e FROM Evento e");
-        eventoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : eventoQuery.getResultList();
+        eventoList = EManager.getInstance().getDatabaseAccessor().getEventos();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabela_eventos = new javax.swing.JTable();
         botaoHorarios = new javax.swing.JButton();
@@ -114,7 +114,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         bindingGroup.bind();
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private void botaoHorariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoHorariosActionPerformed
         new InterfaceHorarios().setVisible(true);
@@ -130,7 +130,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         Object selection = JOptionPane.showInputDialog(null, "Qual nível de acesso deseja requisitar?",
             "Seleção", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
         try {
-            SendMail.enviaEmail(selection.toString());
+            EManager.getInstance().getEnviaEmailAccessor().emailRequisitaPrivilegio(selection.toString(), UsuarioManager.getUsuario().getLogin());
             JOptionPane.showMessageDialog(null, "Pedido enviado com sucesso.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,15 +172,11 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.persistence.EntityManager CalendarioPUEntityManager;
     public javax.swing.JButton botaoHorarios;
     public javax.swing.JButton botaoParticipados;
     public javax.swing.JButton botaoPrivilegio;
-    private java.util.List<calendarioacademico.commons.Evento> eventoList;
-    private javax.persistence.Query eventoQuery;
+    private List<Evento> eventoList;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabela_eventos;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
-    // End of variables declaration//GEN-END:variables
 }

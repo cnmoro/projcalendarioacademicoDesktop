@@ -1,4 +1,4 @@
-package calendarioacademico.servicos;
+package interfaces;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;

@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package calendarioacademico.servicos;
+package interfaces;
 
-import calendarioacademico.commons.Usuario;     
-import calendarioacademico.utils.EManager;
-import calendarioacademico.utils.MD5Util;
+import utils.EManager;
 import java.util.List;
 import javax.swing.JOptionPane;
+import models.Usuario;
+import utils.MD5Util;
 
 /**
  *
@@ -111,8 +106,7 @@ public class InterfaceLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_campoLoginActionPerformed
 
     private void botaoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoLoginActionPerformed
-        List<Usuario> users = EManager.getInstance().createNamedQuery("Usuario.findByLoginSenha", Usuario.class).setParameter("login", this.campoLogin.getText()).setParameter("senha", MD5Util.md5Hash(new String(this.campoSenha.getPassword()))).getResultList();
-//        EManager.getInstance().createNamedQuery("Participacao.findByUsuario").setParameter("idusuario", UsuarioManager.getUsuario()).getResultList();
+        List<Usuario> users = EManager.getInstance().getDatabaseAccessor().getUsuariosByLoginSenha(this.campoLogin.getText(), new String(this.campoSenha.getPassword()));
         // Login sucesso
         if (users.size() > 0) {
             UsuarioManager.setUsuario(users.get(0));

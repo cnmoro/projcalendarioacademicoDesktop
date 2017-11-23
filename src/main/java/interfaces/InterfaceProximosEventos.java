@@ -1,14 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package calendarioacademico.servicos;
+package interfaces;
 
-import calendarioacademico.commons.Evento;
-import calendarioacademico.utils.EManager;
 import java.util.Date;
 import java.util.List;
+import models.Evento;
+import utils.EManager;
 
 /**
  *
@@ -16,22 +11,13 @@ import java.util.List;
  */
 public class InterfaceProximosEventos extends javax.swing.JFrame {
 
-    public final static long DOIAS_DIAS = 48 * 60 * 60 * 1000L;
-    
     public InterfaceProximosEventos() {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        List<Evento> eventos = EManager.getInstance().createNamedQuery("Evento.findAll", Evento.class).getResultList();
-        StringBuilder sbuilder = new StringBuilder();
-            Date horaAtual = new Date();
-            for (int i = 0; i < eventos.size(); i++) {
-                if (Math.abs(horaAtual.getTime() - eventos.get(i).getDatainicio().getTime()) <= DOIAS_DIAS) {
-                    sbuilder.append(eventos.get(i).getNome()).append(", ").append(eventos.get(i).getHoras()).append(" horas complementares.");
-                    sbuilder.append(System.getProperty("line.separator"));
-                }
-            }
-            this.textarea_proximoseventos.setText(sbuilder.toString());
+//        "Evento.findAll", Evento.class).getResultList();
+        List<Evento> eventos = EManager.getInstance().getDatabaseAccessor().getEventos();
+        this.textarea_proximoseventos.setText(EManager.getInstance().getDatabaseAccessor().getProximosEventos());
     }
 
     /**

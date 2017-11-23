@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package calendarioacademico.servicos;
+package interfaces;
 
-import calendarioacademico.commons.Participacao;
-import static calendarioacademico.servicos.InterfaceParticipados.tabelaParticipacao;
-import calendarioacademico.utils.EManager;
+import utils.EManager;
+import static interfaces.InterfaceParticipados.tabelaParticipacao;
 import javax.swing.JOptionPane;
+import models.Participacao;
 
 /**
  *
@@ -79,9 +79,7 @@ public class InterfaceFeedback extends javax.swing.JFrame {
         this.p.setFeedback(txt_feedback.getText());
         
         if (!txt_feedback.getText().equalsIgnoreCase("")) {
-            EManager.getInstance().getTransaction().begin();
-            EManager.getInstance().merge(p);
-            EManager.getInstance().getTransaction().commit();
+            EManager.getInstance().getDatabaseAccessor().updateParticipacao(p);
         }
         
         this.dispose();

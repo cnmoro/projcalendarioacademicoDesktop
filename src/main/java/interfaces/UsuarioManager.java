@@ -1,6 +1,6 @@
-package calendarioacademico.servicos;
+package interfaces;
 
-import calendarioacademico.commons.Usuario;
+import models.Usuario;
 
 /**
  *
@@ -16,5 +16,4 @@ public class UsuarioManager {
     public static void setUsuario(Usuario usuario) {
         UsuarioManager.usuario = usuario;
     }
-   
 }
