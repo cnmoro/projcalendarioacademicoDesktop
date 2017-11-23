@@ -41,7 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Profatendimento.findAll", query = "SELECT p FROM Profatendimento p")
     , @NamedQuery(name = "Profatendimento.findById", query = "SELECT p FROM Profatendimento p WHERE p.id = :id")
     , @NamedQuery(name = "Profatendimento.findByDatainicio", query = "SELECT p FROM Profatendimento p WHERE p.datainicio = :datainicio")
+    , @NamedQuery(name = "Profatendimento.findByProfessor", query = "SELECT p FROM Profatendimento p WHERE p.idprofessor = :idprofessor")
     , @NamedQuery(name = "Profatendimento.findByDatafim", query = "SELECT p FROM Profatendimento p WHERE p.datafim = :datafim")})
+
 public class Profatendimento implements Serializable {
 
     @Transient

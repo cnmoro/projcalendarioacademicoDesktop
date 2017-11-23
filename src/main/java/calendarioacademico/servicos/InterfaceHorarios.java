@@ -40,12 +40,16 @@ public class InterfaceHorarios extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         CalendarioPUEntityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("CalendarioPU").createEntityManager();
-        profatendimentoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Profatendimento p");
+        if (UsuarioManager.getUsuario().getNivelacesso().equalsIgnoreCase("Professor")) {
+            profatendimentoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Profatendimento p WHERE p.idprofessor = :idprofessor").setParameter("idprofessor", UsuarioManager.getUsuario());
+        } else {
+            profatendimentoQuery = java.beans.Beans.isDesignTime() ? null : CalendarioPUEntityManager.createQuery("SELECT p FROM Profatendimento p");
+        }
         profatendimentoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : profatendimentoQuery.getResultList();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabela_horarios = new javax.swing.JTable();
@@ -137,7 +141,7 @@ public class InterfaceHorarios extends javax.swing.JFrame {
         bindingGroup.bind();
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private void bt_adicionarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_adicionarHorarioActionPerformed
         inserir = true;
